@@ -8,26 +8,55 @@ from eralchemy import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
+class User(Base):
+    __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
+    name = Column(String(20))
+    mail = Column(String(30))
+    favoritos = relationship("Favorito")
 
-class Address(Base):
-    __tablename__ = 'address'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
+class Favorito(Base):
+    __tablename__ = 'favorito'
     id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    user_id = Column(Integer, ForeignKey("user.id"))
+
+class Location(Base):
+    __tablename__ = 'location'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(20))
+    typed = Column(String(20))
+    dimension = Column(String(20))
+    character_id = Column(Integer, ForeignKey("character.id"))
+    character = relationship("Character", back_populates="characters")
+
+class Character(Base):
+    __tablename__ = 'character'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(20))
+    status = Column(String(20))
+    species = Column(String(20))
+    gender = Column(String(20))
+    characters = relationship("Location")
+    characters_e = relationship("Episode")
+    favorito_id = Column(Integer, ForeignKey("favorito.id"))
+
+class Episode(Base):
+    __tablename__ = 'episode'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(20))
+    air_date = Column(String(20))
+    species = Column(String(20))
+    episode = Column(String(20))
+    character_id = Column(Integer, ForeignKey("character.id"))
+    character = relationship("Character", back_populates="characters_e")
+
+
+
 
     def to_dict(self):
         return {}
+
+
 
 ## Draw from SQLAlchemy base
 try:
