@@ -39,6 +39,8 @@ class Character(Base):
     characters = relationship("Location")
     characters_e = relationship("Episode")
     favorito_id = Column(Integer, ForeignKey("favorito.id"))
+    location_id = Column(Integer, ForeignKey("location.id"))
+    episode_id = Column(Integer, ForeignKey("episode.id"))
 
 class Episode(Base):
     __tablename__ = 'episode'
